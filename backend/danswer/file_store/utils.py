@@ -1,8 +1,6 @@
 from io import BytesIO
 from typing import cast
 from uuid import uuid4
-
-import requests
 from sqlalchemy.orm import Session
 
 from danswer.configs.constants import FileOrigin
@@ -12,6 +10,7 @@ from danswer.file_store.file_store import get_default_file_store
 from danswer.file_store.models import FileDescriptor
 from danswer.file_store.models import InMemoryChatFile
 from danswer.utils.threadpool_concurrency import run_functions_tuples_in_parallel
+from security import safe_requests
 
 
 def load_chat_file(
@@ -55,7 +54,7 @@ def save_file_from_url(url: str) -> str:
     using multithreading. In practice, sharing a session has resulted in
     weird errors."""
     with get_session_context_manager() as db_session:
-        response = requests.get(url)
+        response = safe_requests.get(url)
         response.raise_for_status()
 
         unique_id = str(uuid4())

@@ -1,6 +1,5 @@
 from typing import Any
-
-import requests
+from security import safe_requests
 
 
 class BookStackClientRequestFailedError(ConnectionError):
@@ -26,7 +25,7 @@ class BookStackApiClient:
     def get(self, endpoint: str, params: dict[str, str]) -> dict[str, Any]:
         url: str = self._build_url(endpoint)
         headers = self._build_headers()
-        response = requests.get(url, headers=headers, params=params)
+        response = safe_requests.get(url, headers=headers, params=params)
 
         try:
             json = response.json()

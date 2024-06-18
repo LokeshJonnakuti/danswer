@@ -69,6 +69,7 @@ from danswer.search.retrieval.search_runner import query_processing
 from danswer.search.retrieval.search_runner import remove_stop_words_and_punctuation
 from danswer.utils.batching import batch_generator
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 logger = setup_logger()
 
@@ -187,7 +188,7 @@ def _get_vespa_chunks_by_document_id(
 
     document_chunks: list[dict] = []
     while True:
-        response = requests.get(url, params=params)
+        response = safe_requests.get(url, params=params)
         try:
             response.raise_for_status()
         except requests.HTTPError as e:
@@ -683,8 +684,7 @@ def _query_vespa(query_params: Mapping[str, str | int | float]) -> list[Inferenc
 
 @retry(tries=3, delay=1, backoff=2)
 def _inference_chunk_by_vespa_id(vespa_id: str, index_name: str) -> InferenceChunk:
-    res = requests.get(
-        f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}"
+    res = safe_requests.get(f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}"
     )
     res.raise_for_status()
 
