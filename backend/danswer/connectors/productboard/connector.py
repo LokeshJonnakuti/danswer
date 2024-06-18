@@ -2,9 +2,11 @@ from collections.abc import Generator
 from itertools import chain
 from typing import Any
 from typing import cast
+
 from bs4 import BeautifulSoup
 from dateutil import parser
 from retry import retry
+from security import safe_requests
 
 from danswer.configs.app_configs import INDEX_BATCH_SIZE
 from danswer.configs.constants import DocumentSource
@@ -16,7 +18,6 @@ from danswer.connectors.models import BasicExpertInfo
 from danswer.connectors.models import Document
 from danswer.connectors.models import Section
 from danswer.utils.logger import setup_logger
-from security import safe_requests
 
 
 logger = setup_logger()
