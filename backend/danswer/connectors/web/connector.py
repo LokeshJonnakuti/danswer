@@ -141,7 +141,7 @@ def start_playwright() -> Tuple[Playwright, BrowserContext]:
 
 
 def extract_urls_from_sitemap(sitemap_url: str) -> list[str]:
-    response = requests.get(sitemap_url)
+    response = requests.get(sitemap_url, timeout=60)
     response.raise_for_status()
 
     soup = BeautifulSoup(response.content, "html.parser")
@@ -256,7 +256,7 @@ class WebConnector(LoadConnector):
 
                 if current_url.split(".")[-1] == "pdf":
                     # PDF files are not checked for links
-                    response = requests.get(current_url)
+                    response = requests.get(current_url, timeout=60)
                     page_text = pdf_to_text(file=io.BytesIO(response.content))
 
                     doc_batch.append(

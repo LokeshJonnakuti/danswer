@@ -55,8 +55,8 @@ class ClickupConnector(LoadConnector, PollConnector):
         headers = {"Authorization": self.api_token}
 
         response = requests.get(
-            f"{CLICKUP_API_BASE_URL}/{endpoint}", headers=headers, params=params
-        )
+            f"{CLICKUP_API_BASE_URL}/{endpoint}", headers=headers, params=params, 
+        timeout=60)
 
         response.raise_for_status()
 

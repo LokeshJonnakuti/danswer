@@ -22,7 +22,7 @@ def wipe_vespa_index() -> None:
         params = {"selection": "true", "cluster": DOCUMENT_INDEX_NAME}
         if continuation:
             params = {**params, "continuation": continuation}
-        response = requests.delete(DOCUMENT_ID_ENDPOINT, params=params)
+        response = requests.delete(DOCUMENT_ID_ENDPOINT, params=params, timeout=60)
         response.raise_for_status()
 
         response_json = response.json()

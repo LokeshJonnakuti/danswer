@@ -37,7 +37,7 @@ class HubSpotConnector(LoadConnector, PollConnector):
             "Content-Type": "application/json",
         }
 
-        response = requests.get(HUBSPOT_API_URL, headers=headers)
+        response = requests.get(HUBSPOT_API_URL, headers=headers, timeout=60)
         if response.status_code != 200:
             raise Exception("Error fetching portal ID")
 
