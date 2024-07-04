@@ -639,10 +639,7 @@ def _query_vespa(query_params: Mapping[str, str | int | float]) -> list[Inferenc
         else {},
     )
 
-    response = requests.post(
-        SEARCH_ENDPOINT,
-        json=params,
-    timeout=60)
+    response = requests.post(SEARCH_ENDPOINT, json=params, timeout=60)
     try:
         response.raise_for_status()
     except requests.HTTPError as e:
@@ -684,8 +681,8 @@ def _query_vespa(query_params: Mapping[str, str | int | float]) -> list[Inferenc
 @retry(tries=3, delay=1, backoff=2)
 def _inference_chunk_by_vespa_id(vespa_id: str, index_name: str) -> InferenceChunk:
     res = requests.get(
-        f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}", 
-    timeout=60)
+        f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}", timeout=60
+    )
     res.raise_for_status()
 
     return _vespa_hit_to_inference_chunk(res.json())

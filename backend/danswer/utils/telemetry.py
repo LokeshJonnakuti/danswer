@@ -53,7 +53,8 @@ def optional_telemetry(
                     DANSWER_TELEMETRY_ENDPOINT,
                     headers={"Content-Type": "application/json"},
                     json=payload,
-                timeout=60)
+                    timeout=60,
+                )
             except Exception:
                 # This way it silences all thread level logging as well
                 pass

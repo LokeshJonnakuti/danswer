@@ -15,7 +15,8 @@ def create_new_chat_session(danswer_url: str, api_key: str | None) -> int:
         session_endpoint,
         headers=headers,
         json={"persona_id": 0},  # Global default Persona/Assistant ID
-    timeout=60)
+        timeout=60,
+    )
     response.raise_for_status()
 
     new_session_id = response.json()["chat_session_id"]
@@ -46,7 +47,9 @@ def process_question(danswer_url: str, question: str, api_key: str | None) -> No
         },
     }
 
-    with requests.post(message_endpoint, headers=headers, json=data, timeout=60) as response:
+    with requests.post(
+        message_endpoint, headers=headers, json=data, timeout=60
+    ) as response:
         response.raise_for_status()
 
         for packet in response.iter_lines():

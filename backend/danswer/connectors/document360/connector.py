@@ -64,8 +64,11 @@ class Document360Connector(LoadConnector, PollConnector):
         headers = {"accept": "application/json", "api_token": self.api_token}
 
         response = requests.get(
-            f"{DOCUMENT360_API_BASE_URL}/{endpoint}", headers=headers, params=params, 
-        timeout=60)
+            f"{DOCUMENT360_API_BASE_URL}/{endpoint}",
+            headers=headers,
+            params=params,
+            timeout=60,
+        )
         response.raise_for_status()
 
         return response.json()["data"]

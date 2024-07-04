@@ -117,7 +117,9 @@ class EmbeddingModel:
             normalize_embeddings=self.normalize,
         )
 
-        response = requests.post(self.embed_server_endpoint, json=embed_request.dict(), timeout=60)
+        response = requests.post(
+            self.embed_server_endpoint, json=embed_request.dict(), timeout=60
+        )
         response.raise_for_status()
 
         return EmbedResponse(**response.json()).embeddings
@@ -136,8 +138,8 @@ class CrossEncoderEnsembleModel:
         rerank_request = RerankRequest(query=query, documents=passages)
 
         response = requests.post(
-            self.rerank_server_endpoint, json=rerank_request.dict(), 
-        timeout=60)
+            self.rerank_server_endpoint, json=rerank_request.dict(), timeout=60
+        )
         response.raise_for_status()
 
         return RerankResponse(**response.json()).scores
@@ -159,8 +161,8 @@ class IntentModel:
         intent_request = IntentRequest(query=query)
 
         response = requests.post(
-            self.intent_server_endpoint, json=intent_request.dict(), 
-        timeout=60)
+            self.intent_server_endpoint, json=intent_request.dict(), timeout=60
+        )
         response.raise_for_status()
 
         return IntentResponse(**response.json()).class_probs
