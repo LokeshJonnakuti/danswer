@@ -16,6 +16,7 @@ from danswer.configs.app_configs import POSTGRES_PORT
 from danswer.configs.app_configs import POSTGRES_USER
 from danswer.document_index.vespa.index import DOCUMENT_ID_ENDPOINT
 from danswer.utils.logger import setup_logger
+from security import safe_command
 
 logger = setup_logger()
 
@@ -24,8 +25,7 @@ def save_postgres(filename: str, container_name: str) -> None:
     logger.info("Attempting to take Postgres snapshot")
     cmd = f"docker exec {container_name} pg_dump -U {POSTGRES_USER} -h {POSTGRES_HOST} -p {POSTGRES_PORT} -W -F t {POSTGRES_DB}"
     with open(filename, "w") as file:
-        subprocess.run(
-            cmd,
+        safe_command.run(subprocess.run, cmd,
             shell=True,
             check=True,
             stdout=file,
@@ -45,7 +45,7 @@ def load_postgres(filename: str, container_name: str) -> None:
     host_file_path = os.path.abspath(filename)
 
     copy_cmd = f"docker cp {host_file_path} {container_name}:/tmp/"
-    subprocess.run(copy_cmd, shell=True, check=True)
+    safe_command.run(subprocess.run, copy_cmd, shell=True, check=True)
 
     container_file_path = f"/tmp/{os.path.basename(filename)}"
 
@@ -53,7 +53,7 @@ def load_postgres(filename: str, container_name: str) -> None:
         f"docker exec {container_name} pg_restore --clean -U {POSTGRES_USER} "
         f"-h localhost -p {POSTGRES_PORT} -d {POSTGRES_DB} -1 -F t {container_file_path}"
     )
-    subprocess.run(restore_cmd, shell=True, check=True)
+    safe_command.run(subprocess.run, restore_cmd, shell=True, check=True)
 
 
 def save_vespa(filename: str) -> None:
