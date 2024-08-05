@@ -1,5 +1,6 @@
 import logging
 import re
+import secrets
 import string
 import time
 from collections.abc import MutableMapping
@@ -38,7 +39,6 @@ from danswer.utils.logger import setup_logger
 from danswer.utils.telemetry import optional_telemetry
 from danswer.utils.telemetry import RecordType
 from danswer.utils.text_processing import replace_whitespaces_w_space
-import secrets
 
 logger = setup_logger()
 
