@@ -1,5 +1,4 @@
 import json
-import random
 
 from sqlalchemy.orm import Session
 
@@ -15,6 +14,7 @@ from danswer.prompts.filter_extration import SOURCE_FILTER_PROMPT
 from danswer.prompts.filter_extration import WEB_SOURCE_WARNING
 from danswer.utils.logger import setup_logger
 from danswer.utils.text_processing import extract_embedded_json
+import secrets
 
 logger = setup_logger()
 
@@ -37,9 +37,9 @@ def _sample_document_sources(
     if len(valid_sources) < num_sample:
         if not allow_less:
             raise RuntimeError("Not enough sample Document Sources")
-        return random.sample(valid_sources, len(valid_sources))
+        return secrets.SystemRandom().sample(valid_sources, len(valid_sources))
     else:
-        return random.sample(valid_sources, num_sample)
+        return secrets.SystemRandom().sample(valid_sources, num_sample)
 
 
 def extract_source_filter(
