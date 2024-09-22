@@ -2,8 +2,6 @@ from collections.abc import Generator
 from itertools import chain
 from typing import Any
 from typing import cast
-
-import requests
 from bs4 import BeautifulSoup
 from dateutil import parser
 from retry import retry
@@ -18,6 +16,7 @@ from danswer.connectors.models import BasicExpertInfo
 from danswer.connectors.models import Document
 from danswer.connectors.models import Section
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 
 logger = setup_logger()
@@ -68,7 +67,7 @@ class ProductboardConnector(PollConnector):
 
         @retry(tries=3, delay=1, backoff=2)
         def fetch(link: str) -> dict[str, Any]:
-            response = requests.get(link, headers=headers)
+            response = safe_requests.get(link, headers=headers)
             if not response.ok:
                 # rate-limiting is at 50 requests per second.
                 # The delay in this retry should handle this while this is

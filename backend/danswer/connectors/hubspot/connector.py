@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timezone
 from typing import Any
-
-import requests
 from hubspot import HubSpot  # type: ignore
 
 from danswer.configs.app_configs import INDEX_BATCH_SIZE
@@ -15,6 +13,7 @@ from danswer.connectors.models import ConnectorMissingCredentialError
 from danswer.connectors.models import Document
 from danswer.connectors.models import Section
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 HUBSPOT_BASE_URL = "https://app.hubspot.com/contacts/"
 HUBSPOT_API_URL = "https://api.hubapi.com/integrations/v1/me"
@@ -37,7 +36,7 @@ class HubSpotConnector(LoadConnector, PollConnector):
             "Content-Type": "application/json",
         }
 
-        response = requests.get(HUBSPOT_API_URL, headers=headers)
+        response = safe_requests.get(HUBSPOT_API_URL, headers=headers)
         if response.status_code != 200:
             raise Exception("Error fetching portal ID")
 

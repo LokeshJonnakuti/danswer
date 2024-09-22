@@ -3,8 +3,6 @@ import urllib.parse
 from datetime import datetime
 from datetime import timezone
 from typing import Any
-
-import requests
 from pydantic import BaseModel
 from requests import Response
 
@@ -21,6 +19,7 @@ from danswer.connectors.models import Document
 from danswer.connectors.models import Section
 from danswer.file_processing.html_utils import parse_html_page_basic
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 logger = setup_logger()
 
@@ -36,7 +35,7 @@ def discourse_request(
 ) -> Response:
     headers = {"Api-Key": perms.api_key, "Api-Username": perms.api_username}
 
-    response = requests.get(endpoint, headers=headers, params=params)
+    response = safe_requests.get(endpoint, headers=headers, params=params)
     response.raise_for_status()
 
     return response

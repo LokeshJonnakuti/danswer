@@ -29,6 +29,7 @@ from danswer.connectors.models import Section
 from danswer.file_processing.extract_file_text import pdf_to_text
 from danswer.file_processing.html_utils import web_html_cleanup
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 logger = setup_logger()
 
@@ -80,7 +81,7 @@ def protected_url_check(url: str) -> None:
 
 def check_internet_connection(url: str) -> None:
     try:
-        response = requests.get(url, timeout=3)
+        response = safe_requests.get(url, timeout=3)
         response.raise_for_status()
     except (requests.RequestException, ValueError):
         raise Exception(f"Unable to reach {url} - check your internet connection")
@@ -141,7 +142,7 @@ def start_playwright() -> Tuple[Playwright, BrowserContext]:
 
 
 def extract_urls_from_sitemap(sitemap_url: str) -> list[str]:
-    response = requests.get(sitemap_url)
+    response = safe_requests.get(sitemap_url)
     response.raise_for_status()
 
     soup = BeautifulSoup(response.content, "html.parser")
@@ -256,7 +257,7 @@ class WebConnector(LoadConnector):
 
                 if current_url.split(".")[-1] == "pdf":
                     # PDF files are not checked for links
-                    response = requests.get(current_url)
+                    response = safe_requests.get(current_url)
                     page_text = pdf_to_text(file=io.BytesIO(response.content))
 
                     doc_batch.append(

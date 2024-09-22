@@ -20,6 +20,7 @@ from danswer.connectors.models import ConnectorMissingCredentialError
 from danswer.connectors.models import Document
 from danswer.connectors.models import Section
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 
 logger = setup_logger()
@@ -49,7 +50,7 @@ class GongConnector(LoadConnector, PollConnector):
 
     def _get_workspace_id_map(self) -> dict[str, str]:
         url = f"{GONG_BASE_URL}/v2/workspaces"
-        response = requests.get(url, headers=self._get_auth_header())
+        response = safe_requests.get(url, headers=self._get_auth_header())
         response.raise_for_status()
 
         workspaces_details = response.json().get("workspaces")

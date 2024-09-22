@@ -16,6 +16,7 @@ from danswer.configs.app_configs import POSTGRES_PORT
 from danswer.configs.app_configs import POSTGRES_USER
 from danswer.document_index.vespa.index import DOCUMENT_ID_ENDPOINT
 from danswer.utils.logger import setup_logger
+from security import safe_requests
 
 logger = setup_logger()
 
@@ -64,7 +65,7 @@ def save_vespa(filename: str) -> None:
     while continuation is not None:
         if continuation:
             params = {"continuation": continuation}
-        response = requests.get(DOCUMENT_ID_ENDPOINT, params=params)
+        response = safe_requests.get(DOCUMENT_ID_ENDPOINT, params=params)
         response.raise_for_status()
         found = response.json()
         continuation = found.get("continuation")
