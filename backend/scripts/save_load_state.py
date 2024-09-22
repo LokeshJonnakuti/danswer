@@ -6,6 +6,7 @@ import os
 import subprocess
 
 import requests
+from security import safe_requests
 
 from alembic import command
 from alembic.config import Config
@@ -16,7 +17,6 @@ from danswer.configs.app_configs import POSTGRES_PORT
 from danswer.configs.app_configs import POSTGRES_USER
 from danswer.document_index.vespa.index import DOCUMENT_ID_ENDPOINT
 from danswer.utils.logger import setup_logger
-from security import safe_requests
 
 logger = setup_logger()
 

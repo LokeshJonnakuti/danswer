@@ -17,6 +17,7 @@ from typing import cast
 import httpx
 import requests
 from retry import retry
+from security import safe_requests
 
 from danswer.configs.app_configs import LOG_VESPA_TIMING_INFORMATION
 from danswer.configs.app_configs import VESPA_CONFIG_SERVER_HOST
@@ -69,7 +70,6 @@ from danswer.search.retrieval.search_runner import query_processing
 from danswer.search.retrieval.search_runner import remove_stop_words_and_punctuation
 from danswer.utils.batching import batch_generator
 from danswer.utils.logger import setup_logger
-from security import safe_requests
 
 logger = setup_logger()
 
