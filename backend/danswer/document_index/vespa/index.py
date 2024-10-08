@@ -187,7 +187,7 @@ def _get_vespa_chunks_by_document_id(
 
     document_chunks: list[dict] = []
     while True:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=60)
         try:
             response.raise_for_status()
         except requests.HTTPError as e:
@@ -642,7 +642,7 @@ def _query_vespa(query_params: Mapping[str, str | int | float]) -> list[Inferenc
     response = requests.post(
         SEARCH_ENDPOINT,
         json=params,
-    )
+    timeout=60)
     try:
         response.raise_for_status()
     except requests.HTTPError as e:
@@ -684,8 +684,8 @@ def _query_vespa(query_params: Mapping[str, str | int | float]) -> list[Inferenc
 @retry(tries=3, delay=1, backoff=2)
 def _inference_chunk_by_vespa_id(vespa_id: str, index_name: str) -> InferenceChunk:
     res = requests.get(
-        f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}"
-    )
+        f"{DOCUMENT_ID_ENDPOINT.format(index_name=index_name)}/{vespa_id}", 
+    timeout=60)
     res.raise_for_status()
 
     return _vespa_hit_to_inference_chunk(res.json())
@@ -806,7 +806,7 @@ class VespaIndex(DocumentIndex):
         zip_file = in_memory_zip_from_file_bytes(zip_dict)
 
         headers = {"Content-Type": "application/zip"}
-        response = requests.post(deploy_url, headers=headers, data=zip_file)
+        response = requests.post(deploy_url, headers=headers, data=zip_file, timeout=60)
         if response.status_code != 200:
             raise RuntimeError(
                 f"Failed to prepare Vespa Danswer Index. Response: {response.text}"

@@ -42,7 +42,7 @@ def _rate_limited_request(
     endpoint: str, headers: dict, params: dict | None = None
 ) -> Any:
     # https://my.axerosolutions.com/spaces/5/communifire-documentation/wiki/view/370/rest-api
-    return requests.get(endpoint, headers=headers, params=params)
+    return requests.get(endpoint, headers=headers, params=params, timeout=60)
 
 
 # https://my.axerosolutions.com/spaces/5/communifire-documentation/wiki/view/595/rest-api-get-content-list

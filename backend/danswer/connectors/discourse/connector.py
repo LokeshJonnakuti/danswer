@@ -36,7 +36,7 @@ def discourse_request(
 ) -> Response:
     headers = {"Api-Key": perms.api_key, "Api-Username": perms.api_username}
 
-    response = requests.get(endpoint, headers=headers, params=params)
+    response = requests.get(endpoint, headers=headers, params=params, timeout=60)
     response.raise_for_status()
 
     return response

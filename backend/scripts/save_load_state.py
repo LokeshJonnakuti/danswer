@@ -64,7 +64,7 @@ def save_vespa(filename: str) -> None:
     while continuation is not None:
         if continuation:
             params = {"continuation": continuation}
-        response = requests.get(DOCUMENT_ID_ENDPOINT, params=params)
+        response = requests.get(DOCUMENT_ID_ENDPOINT, params=params, timeout=60)
         response.raise_for_status()
         found = response.json()
         continuation = found.get("continuation")
@@ -86,8 +86,8 @@ def load_vespa(filename: str) -> None:
             new_doc = json.loads(line.strip())
             doc_id = new_doc["update"].split("::")[-1]
             response = requests.post(
-                DOCUMENT_ID_ENDPOINT + "/" + doc_id, headers=headers, json=new_doc
-            )
+                DOCUMENT_ID_ENDPOINT + "/" + doc_id, headers=headers, json=new_doc, 
+            timeout=60)
             response.raise_for_status()
 
 

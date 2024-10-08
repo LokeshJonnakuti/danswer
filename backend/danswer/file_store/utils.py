@@ -55,7 +55,7 @@ def save_file_from_url(url: str) -> str:
     using multithreading. In practice, sharing a session has resulted in
     weird errors."""
     with get_session_context_manager() as db_session:
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         response.raise_for_status()
 
         unique_id = str(uuid4())

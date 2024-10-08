@@ -144,7 +144,7 @@ class CustomTool(Tool):
         url = self._method_spec.build_url(self._base_url, path_params, query_params)
         method = self._method_spec.method
 
-        response = requests.request(method, url, json=request_body)
+        response = requests.request(method, url, json=request_body, timeout=60)
 
         yield ToolResponse(
             id=CUSTOM_TOOL_RESPONSE_ID,

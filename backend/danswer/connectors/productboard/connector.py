@@ -68,7 +68,7 @@ class ProductboardConnector(PollConnector):
 
         @retry(tries=3, delay=1, backoff=2)
         def fetch(link: str) -> dict[str, Any]:
-            response = requests.get(link, headers=headers)
+            response = requests.get(link, headers=headers, timeout=60)
             if not response.ok:
                 # rate-limiting is at 50 requests per second.
                 # The delay in this retry should handle this while this is
