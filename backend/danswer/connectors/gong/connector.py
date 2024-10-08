@@ -95,8 +95,8 @@ class GongConnector(LoadConnector, PollConnector):
 
             while True:
                 response = requests.post(
-                    url, headers=self._get_auth_header(), json=body, 
-                timeout=60)
+                    url, headers=self._get_auth_header(), json=body, timeout=60
+                )
                 # If no calls in the range, just break out
                 if response.status_code == 404:
                     break
@@ -132,7 +132,9 @@ class GongConnector(LoadConnector, PollConnector):
             "contentSelector": {"exposedFields": {"parties": True}},
         }
 
-        response = requests.post(url, headers=self._get_auth_header(), json=body, timeout=60)
+        response = requests.post(
+            url, headers=self._get_auth_header(), json=body, timeout=60
+        )
         response.raise_for_status()
 
         calls = response.json().get("calls")
