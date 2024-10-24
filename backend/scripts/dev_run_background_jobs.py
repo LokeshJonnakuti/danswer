@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import threading
+from security import safe_command
 
 
 def monitor_process(process_name: str, process: subprocess.Popen) -> None:
@@ -31,11 +32,9 @@ def run_jobs(exclude_indexing: bool) -> None:
 
     cmd_beat = ["celery", "-A", "danswer.background.celery", "beat", "--loglevel=INFO"]
 
-    worker_process = subprocess.Popen(
-        cmd_worker, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    worker_process = safe_command.run(subprocess.Popen, cmd_worker, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
     )
-    beat_process = subprocess.Popen(
-        cmd_beat, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    beat_process = safe_command.run(subprocess.Popen, cmd_beat, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
     )
 
     worker_thread = threading.Thread(
@@ -51,8 +50,7 @@ def run_jobs(exclude_indexing: bool) -> None:
         update_env["PYTHONPATH"] = "."
         cmd_indexing = ["python", "danswer/background/update.py"]
 
-        indexing_process = subprocess.Popen(
-            cmd_indexing,
+        indexing_process = safe_command.run(subprocess.Popen, cmd_indexing,
             env=update_env,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
