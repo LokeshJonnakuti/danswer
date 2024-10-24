@@ -6,6 +6,7 @@ import os
 import subprocess
 
 import requests
+from security import safe_command
 
 from alembic import command
 from alembic.config import Config
@@ -16,7 +17,6 @@ from danswer.configs.app_configs import POSTGRES_PORT
 from danswer.configs.app_configs import POSTGRES_USER
 from danswer.document_index.vespa.index import DOCUMENT_ID_ENDPOINT
 from danswer.utils.logger import setup_logger
-from security import safe_command
 
 logger = setup_logger()
 
@@ -25,7 +25,9 @@ def save_postgres(filename: str, container_name: str) -> None:
     logger.info("Attempting to take Postgres snapshot")
     cmd = f"docker exec {container_name} pg_dump -U {POSTGRES_USER} -h {POSTGRES_HOST} -p {POSTGRES_PORT} -W -F t {POSTGRES_DB}"
     with open(filename, "w") as file:
-        safe_command.run(subprocess.run, cmd,
+        safe_command.run(
+            subprocess.run,
+            cmd,
             shell=True,
             check=True,
             stdout=file,
