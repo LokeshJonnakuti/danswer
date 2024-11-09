@@ -1,4 +1,5 @@
 import json
+import secrets
 
 from sqlalchemy.orm import Session
 
@@ -14,7 +15,6 @@ from danswer.prompts.filter_extration import SOURCE_FILTER_PROMPT
 from danswer.prompts.filter_extration import WEB_SOURCE_WARNING
 from danswer.utils.logger import setup_logger
 from danswer.utils.text_processing import extract_embedded_json
-import secrets
 
 logger = setup_logger()
 
