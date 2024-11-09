@@ -1,5 +1,4 @@
 import logging
-import random
 import re
 import string
 import time
@@ -39,6 +38,7 @@ from danswer.utils.logger import setup_logger
 from danswer.utils.telemetry import optional_telemetry
 from danswer.utils.telemetry import RecordType
 from danswer.utils.text_processing import replace_whitespaces_w_space
+import secrets
 
 logger = setup_logger()
 
@@ -178,7 +178,7 @@ def build_feedback_id(
     document_id: str | None = None,
     document_rank: int | None = None,
 ) -> str:
-    unique_prefix = "".join(random.choice(string.ascii_letters) for _ in range(10))
+    unique_prefix = "".join(secrets.choice(string.ascii_letters) for _ in range(10))
     if document_id is not None:
         if not document_id or document_rank is None:
             raise ValueError("Invalid document, missing information")
@@ -458,7 +458,7 @@ class SlackRateLimiter:
         self.active_question += 1
 
     def init_waiter(self) -> tuple[int, int]:
-        func_randid = random.getrandbits(128)
+        func_randid = secrets.SystemRandom().getrandbits(128)
         self.waiting_questions.append(func_randid)
         position = self.waiting_questions.index(func_randid) + 1
 
